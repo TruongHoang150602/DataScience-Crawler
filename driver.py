@@ -10,6 +10,7 @@ import time
 def configure_webdriver(url):
     
     options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
     options.add_argument('--disable-web-security')

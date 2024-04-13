@@ -7,32 +7,32 @@ from seleniumwire.utils import decode
 import json
 
 def get_link_post(driver):
-    list_url = []
-    
-    for page in range(1,100):
-        url = f"https://123nhadatviet.com/rao-vat/can-ban/nha-dat/t1/ha-noi/trang--{page}.html"
+    for page in range(490, 2400):
+        list_url = []
+        url = f"https://123nhadatviet.com/rao-vat/can-ban/nha-dat/t2/ho-chi-minh/trang--{page}.html"
         print(f"page: {page}")
         driver.get(url)
         wait_until_page_loads(driver, timeout=2)
         try:
             titles = wait_for_elements(driver, (By.CLASS_NAME, "ct_title"))
             for title in titles:
-                link = title.find_element(By.CSS_SELECTOR, "a").get_attribute("href") 
+                link = title.find_element(By.CSS_SELECTOR, "a").get_attribute("href")
                 list_url.append(link)
+                # Save list_url to a file
+            with open('nhadatviet.txt', 'a') as f:  # 'a' để ghi thêm vào cuối file
+                for url in list_url:
+                    f.write(url + '\n')
+
         except Exception as e:
             print(f"Error: {page}")
             print(e)
-            time.sleep(30) #nhap capcha
+            time.sleep(30)  # Nhập captcha
             break
-    
-    # Save list_url to a file
-    with open('nhadatviet.txt', 'w') as f:
-        for url in list_url:
-            f.write(url + '\n')
+        
 
 def get_detail_data(driver, url, collection):
     driver.get(url)
-    wait_until_page_loads(driver, timeout=3)
+    wait_until_page_loads(driver, timeout=2)
 
     data = {}
     try:
