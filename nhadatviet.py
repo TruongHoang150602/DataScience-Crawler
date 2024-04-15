@@ -48,26 +48,11 @@ def get_detail_data(driver, url, collection):
         data["description"] = wait_and_get_for_element(driver, (By.CSS_SELECTOR, ".detail.text-content"))
         data["contact_name"] = wait_and_get_for_element(driver, (By.CSS_SELECTOR, (".contact-info .name")))
         data["contact_phone"] = wait_and_get_for_element(driver, (By.CSS_SELECTOR, (".contact-info .fone")))
-        address_value = wait_and_get_for_element(driver, (By.CSS_SELECTOR, (".address .value")))
+        data["address"] = wait_and_get_for_element(driver, (By.CSS_SELECTOR, (".address .value")))
 
-        components = address_value.split(", ")
-        street = components[0].split(" ")[1:]  # Remove the first element which is not part of the street
-        street = " ".join(street)
-        ward = components[1].split(" ")[1:]
-        ward = " ".join(ward)
-        district = components[2].split(" ")[1:]
-        district = " ".join(district)
-        province = components[3]
-
-        data['address'] = {
-            "street": street,
-            "ward": ward,
-            "district": district,
-            "province": province
-        }
-
-    except:
+    except Exception as e:
         print(f"Error: {url}")
+        print(e)
         time.sleep(30)
         return
     collection.insert_one(data)
@@ -89,6 +74,7 @@ if __name__ == "__main__":
     # Strip newline characters from each URL
     url_list = [url.strip() for url in url_list]
     for url in url_list:
+        print(url)
         get_detail_data(driver, url, collection)
 
     driver.quit()
